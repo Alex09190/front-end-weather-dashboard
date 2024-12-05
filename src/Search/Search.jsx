@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import Weather from "../Weather/Weather";
 
-const Search = ({ renderWeather }) => {
+const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [cities, setCities] = useState(null);
   const [location, setLocation] = useState(null);
+  const [weather, setWeather] = useState(false);
   const [error, setError] = useState(null);
 
   const handleInput = (event) => {
@@ -11,6 +13,7 @@ const Search = ({ renderWeather }) => {
       event.preventDefault(); //disable submiting form on pressing enter
     }
     setSearchQuery(event.target.value);
+    // setWeather(false); //make weather data disappear while searching cities
   };
 
   const selectCity = (event) => {
@@ -31,8 +34,7 @@ const Search = ({ renderWeather }) => {
           lon: cities.lon,
         });
       }
-
-      renderWeather();
+      setWeather(true);
     });
   };
 
@@ -41,7 +43,7 @@ const Search = ({ renderWeather }) => {
     const apiEndpoint = process.env.REACT_APP_API_URL_LOCATION;
 
     const fetchCities = () => {
-      if (searchQuery != "") {
+      if (searchQuery !== "") {
         fetch(`${apiEndpoint}?q=${searchQuery}`) //fetch article data via proxy server endpoint with searchable filters
           .then((response) => {
             if (!response.ok) throw new Error(`Error fetching data`);
@@ -94,6 +96,7 @@ const Search = ({ renderWeather }) => {
           ))}
         </div>
       )}
+      {weather && <Weather />}
     </div>
   );
 };

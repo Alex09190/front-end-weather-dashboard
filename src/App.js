@@ -1,28 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import React, { useState, useCallback } from "react";
+import React from "react";
 import "./App.css";
 import Search from "./Search/Search";
-import Weather from "./Weather/Weather";
+import Hourly from "./Hourly/Hourly";
 
 function App() {
-  const [render, setRender] = useState(false);
-
-  const renderWeather = useCallback(() => {
-    setRender((prev) => !prev);
-  }, []);
-
   return (
     <div className="App">
       <Router>
         <Routes>
           <Route
             path="/"
-            element={
-              <>
-                <Search renderWeather={renderWeather} />
-                <Weather render={render} />
-              </>
-            }
+            element={<Search />}
+          ></Route>
+          <Route
+            path="/hourly"
+            element={<Hourly />}
           ></Route>
         </Routes>
       </Router>

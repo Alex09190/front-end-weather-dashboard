@@ -1,15 +1,6 @@
-import { useState, useEffect } from "react";
-
 const Air = () => {
   //dependent on weather component
-  const [weather, setWeather] = useState(null);
-
-  useEffect(() => {
-    const loadWeather = () => {
-      setWeather(JSON.parse(sessionStorage.getItem("weather")).current);
-    };
-    loadWeather();
-  }, []);
+  const weather = JSON.parse(sessionStorage.getItem("weather")).current;
 
   return (
     <div>
