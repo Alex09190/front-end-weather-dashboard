@@ -50,10 +50,6 @@ const Search = ({ renderWeather }) => {
           lat: cities.lat,
           lon: cities.lon,
         });
-
-        sessionStorage.setItem("location", JSON.stringify(location));
-        setCities(null);
-        renderWeather();
       }
     });
   };
@@ -62,6 +58,12 @@ const Search = ({ renderWeather }) => {
   useEffect(() => {
     fetchCities();
   }, [searchQuery]);
+
+  useEffect(() => {
+    sessionStorage.setItem("location", JSON.stringify(location));
+    setCities(null);
+    renderWeather();
+  }, [location]);
 
   if (error) return <p>{error}</p>;
 

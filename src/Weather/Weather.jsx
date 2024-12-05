@@ -13,6 +13,13 @@ const Weather = ({ render }) => {
     setLocation(JSON.parse(sessionStorage.getItem("location")));
   };
 
+  const changeTemp = (event) => {
+    if (event) {
+      event.preventDefault();
+    }
+    setTemperature(temperature == "imperial" ? "metric" : "imperial");
+  };
+
   const fetchWeather = () => {
     if (location != null) {
       fetch(
@@ -24,7 +31,6 @@ const Weather = ({ render }) => {
         })
         .then((data) => {
           setWeather(data.current);
-          console.log(data);
           sessionStorage.setItem("weather", data);
         })
         .catch((error) => {
@@ -41,21 +47,40 @@ const Weather = ({ render }) => {
   useEffect(() => {
     fetchWeather();
   }, [location]);
+  useEffect(() => {
+    fetchWeather();
+  }, [temperature]);
 
   if (error) return <p>{error}</p>;
 
   return (
     <div>
+      <button onClick={changeTemp}>
+        <p>
+          Change Temperature Units
+          <br />
+          between Fahrenheit and Celsius
+        </p>
+      </button>
+      <br />
+      Current Unit: {temperature == "imperial" ? "Fahrenheit" : "Celsius"}
       {weather && (
         <div>
           <p>
-            {location.name}, {location.state ? `${location.state}, ` : ""}
+            Location: {location.name},{" "}
+            {location.state ? `${location.state}, ` : ""}
             {location.country}
           </p>
-          <p>Current: {weather.temp}</p>
-          <p>Feels Like: {weather.feels_like}</p>
+          <p>
+            Current: {weather.temp}
+            {temperature == "imperial" ? "°F" : "°C"}
+          </p>
+          <p>
+            Feels Like: {weather.feels_like}
+            {temperature == "imperial" ? "°F" : "°C"}
+          </p>
           <p>Condition: {weather.weather[0].description}</p>
-          <p>Click card to look at hourly temperature</p> 
+          <p>Click card to look at hourly temperature</p>
         </div>
       )}
     </div>
