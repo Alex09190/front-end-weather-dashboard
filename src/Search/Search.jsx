@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 const Search = ({ renderWeather }) => {
-  const apiEndpoint = process.env.REACT_APP_API_URL_LOCATION;
-
-  const [searchQuery, setSearchQuery] = useState("NYC");
+  const [searchQuery, setSearchQuery] = useState("");
   const [cities, setCities] = useState(null);
   const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
@@ -16,28 +13,11 @@ const Search = ({ renderWeather }) => {
     setSearchQuery(event.target.value);
   };
 
-  const fetchCities = (event) => {
-    if (event) {
-      event.preventDefault(); //not needed, api call on happens on handleInput
-    }
-    fetch(`${apiEndpoint}?q=${searchQuery}`) //fetch article data via proxy server endpoint with searchable filters
-      .then((response) => {
-        if (!response.ok) throw new Error(`Error fetching data`);
-        return response.json();
-      })
-      .then((data) => {
-        setCities(data);
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  };
-
   const selectCity = (event) => {
     //puts specific city information from clicked link into session storage
     const city = event.target;
 
-    cities.map((cities) => {
+    cities.forEach((cities) => {
       //check for selected article from searched ones, and store into storage
       const cityCheck = cities.state
         ? `${cities.name}, ${cities.state}, ${cities.country}`
@@ -51,18 +31,36 @@ const Search = ({ renderWeather }) => {
           lon: cities.lon,
         });
       }
+
+      renderWeather();
     });
   };
 
   //initialize and api call when search is changed
   useEffect(() => {
+    const apiEndpoint = process.env.REACT_APP_API_URL_LOCATION;
+
+    const fetchCities = () => {
+      if (searchQuery != "") {
+        fetch(`${apiEndpoint}?q=${searchQuery}`) //fetch article data via proxy server endpoint with searchable filters
+          .then((response) => {
+            if (!response.ok) throw new Error(`Error fetching data`);
+            return response.json();
+          })
+          .then((data) => {
+            setCities(data);
+          })
+          .catch((error) => {
+            setError(error.message);
+          });
+      }
+    };
     fetchCities();
   }, [searchQuery]);
 
   useEffect(() => {
     sessionStorage.setItem("location", JSON.stringify(location));
     setCities(null);
-    renderWeather();
   }, [location]);
 
   if (error) return <p>{error}</p>;
@@ -71,7 +69,7 @@ const Search = ({ renderWeather }) => {
     <div>
       <h1>Weather App</h1>
       <p>Search for a city and then click a location</p>
-      <form onSubmit={fetchCities}>
+      <form>
         <input
           type="text"
           name="searchQuery"
