@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const Search = () => {
+const Search = ({ renderWeather }) => {
   const apiEndpoint = process.env.REACT_APP_API_URL_LOCATION;
 
   const [searchQuery, setSearchQuery] = useState("NYC");
@@ -20,7 +20,6 @@ const Search = () => {
     if (event) {
       event.preventDefault(); //not needed, api call on happens on handleInput
     }
-    console.log(searchQuery);
     fetch(`${apiEndpoint}?q=${searchQuery}`) //fetch article data via proxy server endpoint with searchable filters
       .then((response) => {
         if (!response.ok) throw new Error(`Error fetching data`);
@@ -53,6 +52,8 @@ const Search = () => {
         });
 
         sessionStorage.setItem("location", JSON.stringify(location));
+        setCities(null);
+        renderWeather();
       }
     });
   };
@@ -85,10 +86,10 @@ const Search = () => {
               key={index}
               onClick={selectCity}
             >
-              <h2>
+              <h3>
                 {cities.name}, {cities.state ? `${cities.state}, ` : ""}
                 {cities.country}
-              </h2>
+              </h3>
             </div>
           ))}
         </div>
