@@ -25,7 +25,7 @@ const Search = () => {
       const cityCheck = cities.state
         ? `${cities.name}, ${cities.state}, ${cities.country}`
         : `${cities.name}, ${cities.country}`;
-      if (cityCheck === city.innerText) {
+      if (cityCheck === city.innerText || cityCheck === city.textContent) {
         setLocation({
           name: cities.name,
           country: cities.country,
@@ -40,7 +40,7 @@ const Search = () => {
 
   //initialize and api call when search is changed
   useEffect(() => {
-    const apiEndpoint = process.env.REACT_APP_API_URL_LOCATION;
+    const apiEndpoint = process.env.REACT_APP_API_URL_RENDER_LOC;
 
     const fetchCities = () => {
       if (searchQuery !== "") {
@@ -76,6 +76,7 @@ const Search = () => {
           type="text"
           name="searchQuery"
           id="searchQuery"
+          role="searchQuery"
           onChange={handleInput}
         />
       </form>
