@@ -40,7 +40,7 @@ const Search = () => {
 
   //initialize and api call when search is changed
   useEffect(() => {
-    const apiEndpoint = process.env.REACT_APP_API_URL_RENDER_LOC;
+    const apiEndpoint = process.env.REACT_APP_API_URL_LOCATION;
 
     const fetchCities = () => {
       if (searchQuery !== "") {
@@ -76,7 +76,7 @@ const Search = () => {
           type="text"
           name="searchQuery"
           id="searchQuery"
-          role="searchQuery"
+          placeholder="Search for a city here"
           onChange={handleInput}
         />
       </form>

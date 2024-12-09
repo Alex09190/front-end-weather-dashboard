@@ -18,8 +18,10 @@ const Weather = () => {
       event.preventDefault();
     }
     setTempUnit(tempUnit === "imperial" ? "metric" : "imperial");
-    sessionStorage.setItem("tempUnit", JSON.stringify(tempUnit));
   };
+  useEffect(() => {
+    sessionStorage.setItem("tempUnit", JSON.stringify(tempUnit));
+  }, [tempUnit]);
 
   //initialize and api call when search is changed
   useEffect(() => {
@@ -40,6 +42,8 @@ const Weather = () => {
           })
           .then((data) => {
             setWeather(data.current);
+
+            // console.log("data");
             sessionStorage.setItem("weather", JSON.stringify(data));
           })
           .catch((error) => {

@@ -16,18 +16,18 @@ const Hourly = () => {
       </h2>
       {weather && (
         <div>
-          <table>
+          <table style={{ marginLeft: "auto", marginRight: "auto" }}>
             <tbody>
               <tr>
                 <th>Hour</th>
                 <th>Temp ({tempUnit === "imperial" ? "°F" : "°C"})</th>
-                <th>Feels Like ({tempUnit === "imperial" ? "°F" : "°C"})</th>
+                <th>Feels ({tempUnit === "imperial" ? "°F" : "°C"})</th>
               </tr>
 
               {weather.map((hour, index) => (
                 //print city names, states, and countries - some cities aren't in a state => ternary conditional
                 <tr key={index}>
-                  <td>{Date(hour.dt * 1000).toLocaleString()}</td>
+                  <td>{new Date(hour.dt * 1000).toLocaleString()}</td>
                   <td>{hour.temp}</td>
                   <td>{hour.feels_like}</td>
                 </tr>
